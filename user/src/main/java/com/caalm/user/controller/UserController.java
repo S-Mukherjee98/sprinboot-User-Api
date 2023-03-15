@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
-import com.caalm.user.model.User;
+
+import javax.validation.Valid;
+
 import com.caalm.user.payload.UserDto;
 import com.caalm.user.payload.UserUpdateDto;
 import com.caalm.user.services.UserService;
+import com.mongodb.DuplicateKeyException;
 
 @RestController
 @RequestMapping("/user")
@@ -29,12 +32,13 @@ public class UserController {
 
     @PostMapping
 
-    ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
-        UserDto userDtoCreated= this.userService.createUser(userDto);
-        return new ResponseEntity<UserDto>(userDtoCreated,HttpStatus.CREATED);
+    ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto){
+        
+            UserDto userDtoCreated= this.userService.createUser(userDto);
+            return new ResponseEntity<UserDto>(userDtoCreated,HttpStatus.CREATED);
+            
+        
     }
-
-
 
     @GetMapping
     ResponseEntity<List<UserDto>>getAllUserInfo(){

@@ -9,8 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.dao.DuplicateKeyException;
 import com.caalm.user.payload.ApiResponse;
+
+
 
 
 @RestControllerAdvice
@@ -34,6 +37,22 @@ public class GlobalExceptionHandler {
             resp.put(field_name, message);
         });
         return new ResponseEntity<Map<String,String>>(resp,HttpStatus.BAD_REQUEST);
+    }
+
+    
+
+    @ExceptionHandler(DuplicateKeyException.class)
+    public ResponseEntity<ApiResponse> duplicateKeyExceptionHandler(DuplicateKeyException ex){
+        String message="Username or Mobile Number or Reg.No Can not be duplicate";
+        ApiResponse apiResponse=new ApiResponse(message,false);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiResponse> maxUploadSizeExceedExceptionHandler(MaxUploadSizeExceededException e){
+        String message="Maximum file size should be less than 10MB";
+        ApiResponse apiResponse=new ApiResponse(message,false);
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.NOT_ACCEPTABLE);
     }
 
     

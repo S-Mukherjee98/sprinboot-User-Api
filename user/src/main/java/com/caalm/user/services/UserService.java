@@ -8,6 +8,7 @@ import javax.management.RuntimeErrorException;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.caalm.user.exception.ResourceNotFound;
@@ -15,6 +16,7 @@ import com.caalm.user.model.User;
 import com.caalm.user.payload.UserDto;
 import com.caalm.user.payload.UserUpdateDto;
 import com.caalm.user.repository.UserRepository;
+import com.mongodb.DuplicateKeyException;
 
 @Service
 public class UserService {
@@ -28,11 +30,15 @@ public class UserService {
     //create User
 
     public UserDto createUser(UserDto userDto){
-        
+       
         User   user=this.modelMapper.map(userDto, User.class);
-        User usr=this.userRepository.save(user);
-        UserDto usrdto= this.modelMapper.map(usr, UserDto.class);
-        return usrdto;
+        
+            User usr=this.userRepository.save(user);
+            UserDto usrdto= this.modelMapper.map(usr, UserDto.class);
+            return usrdto;
+            
+        
+        
     }
 //Get user all user info
 
